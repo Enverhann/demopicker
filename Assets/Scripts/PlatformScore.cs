@@ -17,6 +17,7 @@ public class PlatformScore : MonoBehaviour
     private Buttons _buttons;
     private bool _isFailed=true;
     [SerializeField] private GameObject platformBorders;
+    private BoxCollider _boxCollider;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class PlatformScore : MonoBehaviour
         }
         _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _buttons = GameObject.FindGameObjectWithTag("Buttons").GetComponent<Buttons>();
+        _boxCollider = GetComponent<BoxCollider>();
         scoreText.text = $"{_currentScore}/{_scriptable.necessaryScore}";
     }
     private void OnCollisionEnter(Collision collision)
@@ -61,8 +63,9 @@ public class PlatformScore : MonoBehaviour
         platformBorders.SetActive(false);
         armLeft.transform.DORotate(new Vector3(0, 0, 90), 2);
         armRight.transform.DORotate(new Vector3(0, 0, -90), 2);
-        _playerController._canMove = true;
+        _boxCollider.enabled = false;
         _isFailed = true;
+        _playerController._canMove = true;
     }
     public IEnumerator LevelFailed()
     {
